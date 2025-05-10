@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Compress images online with quality control. Free image compression tool that is fast, responsive, and SEO-friendly." />
+  <meta name="keywords" content="image compressor, online image tool, reduce image size, compress jpg, compress png" />
+  <meta name="author" content="Your Brand" />
+  <title>Responsive Image Compressor</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --background: #f9f9f9;
+      --card: #ffffff;
+      --text: #333333;
+      --accent: #005fa3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    input[type="file"] {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .slider-container {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      background-color: var(--accent);
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #004a7a;
+    }
+
+    canvas {
+      display: block;
+      max-width: 100%;
+      margin-top: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    a#downloadLink {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    a#downloadLink:hover {
+      background: #005fa3;
+    }
+
+    .adsense {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .adsense-placeholder {
+      background-color: #e0e0e0;
+      padding: 20px;
+      border: 2px dashed #ccc;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+
+      .slider-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Responsive Image Compressor</h1>
+    <p>Compress your images easily and effectively</p>
+  </header>
+
+  <main>
+    <h2>Upload Image</h2>
+    <input type="file" id="imageInput" accept="image/*" />
+
+    <div class="slider-container">
+      <label for="compressionRange">Compression:</label>
+      <input type="range" id="compressionRange" min="10" max="90" value="70">
+      <span id="compressionValue">70%</span>
+    </div>
+
+    <button onclick="compressImage()">Compress</button>
+
+    <div class="output">
+      <canvas id="outputCanvas"></canvas>
+      <a id="downloadLink" style="display:none;" download="compressed-image.jpg">Download Compressed Image</a>
+    </div>
+
+    <div class="adsense">
+      <div class="adsense-placeholder">
+        Google AdSense Placeholder<br>
+        Replace with your Ad Unit Code
+      </div>
+    </div>
+  </main>
+
+  <!-- AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-AD-UNIT-ID"
+    crossorigin="anonymous"></script>
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="YOUR-AD-UNIT-ID"
+    data-ad-slot="1234567890"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+
+  <!-- Functionality -->
+  <script>
+    const compressionRange = document.getElementById('compressionRange');
+    const compressionValue = document.getElementById('compressionValue');
+
+    compressionRange.addEventListener('input', () => {
+      compressionValue.textContent = compressionRange.value + '%';
+    });
+
+    function compressImage() {
+      const fileInput = document.getElementById('imageInput');
+      const canvas = document.getElementById('outputCanvas');
+      const downloadLink = document.getElementById('downloadLink');
+      const compression = parseInt(compressionRange.value) / 100;
+
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select an image.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.style.display = 'inline-block';
+            downloadLink.textContent = 'Download Compressed Image';
+          }, 'image/jpeg', compression);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+
+</html>
